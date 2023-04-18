@@ -4,7 +4,6 @@ package com.project.RegistrationLogin.Controller;
 import com.project.RegistrationLogin.Dto.CustomerDto;
 import com.project.RegistrationLogin.Dto.LoginDto;
 import com.project.RegistrationLogin.Service.CustomerService;
-import com.project.RegistrationLogin.response.LoginMessage;
 import com.project.RegistrationLogin.response.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
