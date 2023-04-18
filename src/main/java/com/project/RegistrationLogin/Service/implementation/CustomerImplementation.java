@@ -23,8 +23,8 @@ public class CustomerImplementation implements CustomerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-//    @Autowired
-//    private  BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private PasswordHashingServiceImplementation passwordHashing;
 
 
     @Override
