@@ -1,7 +1,7 @@
 package com.project.RegistrationLogin.Service.implementation;
 
 import com.project.RegistrationLogin.Service.PasswordHashingService;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -10,16 +10,16 @@ public class PasswordHashingServiceImplementation implements PasswordHashingServ
 
     @Override
     public String hashPassword(String password) {
-        String hashedPass = BCrypt.hashpw(password, "TEST_SALT");
-        System.out.println(password);
-        System.out.println(hashedPass);
-        return hashedPass;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+        String result = encoder.encode(password);
+        System.out.println(result);
+        return result;
     }
 
     @Override
     public Boolean verifyPassword(String password, String receivedPassword) {
-        Boolean matched = BCrypt.checkpw(password, receivedPassword);
-        System.out.println(matched);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+        Boolean matched = encoder.matches(receivedPassword,password);
         return matched;
     }
 }

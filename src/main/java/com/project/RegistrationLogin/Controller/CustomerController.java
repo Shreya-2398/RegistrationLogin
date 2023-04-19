@@ -5,6 +5,7 @@ import com.project.RegistrationLogin.Dto.CustomerDto;
 import com.project.RegistrationLogin.Dto.LoginDto;
 import com.project.RegistrationLogin.Service.CustomerService;
 import com.project.RegistrationLogin.response.LoginResponse;
+import com.project.RegistrationLogin.response.RegisterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,11 @@ public class CustomerController  {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping(path = "/save")
-    public String saveCustomer(@RequestBody CustomerDto customerDto){
+    @PostMapping(path = "/register")
+    public ResponseEntity<?> saveCustomer(@RequestBody CustomerDto customerDto){
+        RegisterResponse registerResponse = customerService.addCustomer(customerDto);
+       return ResponseEntity.ok(registerResponse);
 
-        String id = customerService.addCustomer(customerDto);
-        return id;
     }
 
     @PostMapping(path = "/login")

@@ -1,5 +1,6 @@
 package com.project.RegistrationLogin.Service.implementation;
 
+import com.project.RegistrationLogin.response.RegisterResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,40 +24,28 @@ public class CustomerImplementation implements CustomerService {
     @Autowired
     private PasswordHashingServiceImplementation passwordHashing;
 
-    // @Override
-    // public Customer registerNewUser(Customer customer) {
-    //     customer.setPassword(passwordHashing.hashPassword(customer.getPassword()));
-    //     return customerRepo.save(customer);
-    // }
-
-    // @Override
-    // public void validateUserCredentials(String email,ng password) throws InvalidCredentialsException {
-    //     Customer customer = customerRepo.findByEmail();
-    //             .orElseThrow(() -> new InvalidCredentialsException("Invalid username or password"));
-
-    //     if (!passwordEncoder.matches(password, user.getPassword())) {
-    //         throw new InvalidCredentialsException("Invalid username or password");
-    //     }
-    // }
-
     @Override
-    public String addCustomer(CustomerDto customerDto) {
+    public RegisterResponse addCustomer(CustomerDto customerDto) {
+        Customer c = customerRepo.findByEmail(customerDto.getEmail());
+        if (c!= null) {
 
+            return new RegisterResponse("User exist", false);
+        }
         Customer customer = new Customer();
         customerDto.getCustomerid();
         customerDto.getCustomername();
         customerDto.getEmail();
-        // String hashedPass = bCryptPasswordEncoder
-        // .encode(customerDto.getPassword());
+
+        customer.setCustomerid(customerDto.getCustomerid());
+        customer.setCustomername(customerDto.getCustomername());
+        customer.setEmail(customerDto.getEmail());
 
         String hashedPass = passwordHashing.hashPassword(customerDto.getPassword());
+        customer.setPassword(hashedPass);
 
-        customerDto.setPassword(hashedPass);
-
-        this.passwordEncoder.encode(customerDto.getPassword());
 
         customerRepo.save(customer);
-        return customer.getCustomername();
+        return new RegisterResponse("Successfully registered",true);
 
     }
 
@@ -66,15 +55,13 @@ public class CustomerImplementation implements CustomerService {
         if (customer == null) {
             return new LoginResponse("User does not exist", false);
         }
-        // Boolean matched = passwordEncoder.matches(loginDTO.getPassword(),
-        // customer.getPassword());
         Boolean matched = passwordHashing.verifyPassword(customer.getPassword(), loginDTO.getPassword());
         if (!matched) {
             return new LoginResponse("Password Not Match", false);
         }
 
         // Issue Access Token
-        return new LoginResponse("Login Failed", false);
+        return new LoginResponse("Login Successful", true);
 
     }
 }
