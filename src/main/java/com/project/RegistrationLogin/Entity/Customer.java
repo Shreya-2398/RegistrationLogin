@@ -1,10 +1,24 @@
 package com.project.RegistrationLogin.Entity;
 
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
+
+
+@Data
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name="customerInfo")
-public class Customer {
+public class Customer implements UserDetails {
 
     @Id
     @Column(name ="customer_id", length = 45)
@@ -19,6 +33,9 @@ public class Customer {
 
     @Column(nullable = false,name="password", length = 255)
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public Customer(int customerid, String customername, String email, String password) {
         this.customerid = customerid;
@@ -54,8 +71,40 @@ public class Customer {
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
     public String getPassword() {
+
         return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
@@ -71,4 +120,8 @@ public class Customer {
                 ", password='" + password + '\'' +
                 '}';
     }
-}
+
+
+
+    }
+

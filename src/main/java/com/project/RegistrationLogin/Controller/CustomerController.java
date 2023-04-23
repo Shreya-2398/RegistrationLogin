@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @RestController
 @CrossOrigin
 @RequestMapping("api/v1/customer")
@@ -29,5 +33,13 @@ public class CustomerController  {
     public ResponseEntity<?> LoginCustomer(@RequestBody LoginDto loginDto){
         LoginResponse loginResponse = customerService.loginCustomer(loginDto);
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/refresh-token")
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        customerService.refreshToken(request, response);
     }
 }
