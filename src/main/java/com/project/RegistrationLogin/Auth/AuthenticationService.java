@@ -37,9 +37,11 @@ public class AuthenticationService {
                 .password(passwordHashing.hashPassword(customerDto.getPassword()))
                 .role(Role.USER)
                 .build();
+
         var savedcustomer =  customerRepo.save(customer);
         var jwtToken = jwtService.generateToken(customer);
         var refreshToken = jwtService.generateRefreshToken(customer);
+        
         saveCustomerToken(savedcustomer, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)

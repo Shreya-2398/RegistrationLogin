@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class PasswordHashingServiceImplementation implements PasswordHashingService {
+public class PasswordHashingServiceImpl implements PasswordHashingService {
 
     @Override
     public String hashPassword(String password) {
